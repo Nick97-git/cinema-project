@@ -5,8 +5,14 @@ import com.dev.cinema.exception.DataProcessingException;
 import com.dev.cinema.lib.Dao;
 import com.dev.cinema.model.MovieSession;
 import com.dev.cinema.util.HibernateUtil;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -34,14 +40,19 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
     }
 
     @Override
-    public List<MovieSession> getAll() {
+    public List<MovieSession> findAvailableSessions(Long movieId, LocalDate date) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            CriteriaQuery<MovieSession> criteriaQuery = session.getCriteriaBuilder()
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<MovieSession> criteriaQuery = criteriaBuilder
                     .createQuery(MovieSession.class);
-            criteriaQuery.from(MovieSession.class);
+            Root<MovieSession> root = criteriaQuery.from(MovieSession.class);
+            Predicate predicateId = criteriaBuilder.equal(root.get("movie"), movieId);
+            Predicate predicateDate = criteriaBuilder.greaterThan(root.get("showTime"),
+                    LocalDateTime.of(date, LocalTime.now()));
+            criteriaQuery.where(predicateId, predicateDate);
             return session.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
-            throw new DataProcessingException("Can't get list of all movie sessions ", e);
+            throw new DataProcessingException("Cannot show all movie sessions from database", e);
         }
     }
 }
