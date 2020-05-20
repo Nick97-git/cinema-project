@@ -16,7 +16,6 @@ public class Main {
     private static final Injector INJECTOR = Injector.getInstance("com.dev.cinema");
 
     public static void main(String[] args) {
-        System.out.println("Movies: ");
         Movie movie = new Movie();
         movie.setTitle("Fast and Furious");
         Movie secondMovie = new Movie();
@@ -25,7 +24,7 @@ public class Main {
         movieService.add(movie);
         movieService.add(secondMovie);
         movieService.getAll().forEach(System.out::println);
-        System.out.println("Cinema halls: ");
+
         CinemaHall redHall = new CinemaHall();
         redHall.setCapacity(150);
         redHall.setDescription("red hall");
@@ -37,7 +36,7 @@ public class Main {
         cinemaHallService.add(redHall);
         cinemaHallService.add(blueHall);
         cinemaHallService.getAll().forEach(System.out::println);
-        System.out.println("Movie sessions: ");
+
         MovieSession sessionOne = new MovieSession();
         sessionOne.setCinemaHall(redHall);
         sessionOne.setMovie(secondMovie);
