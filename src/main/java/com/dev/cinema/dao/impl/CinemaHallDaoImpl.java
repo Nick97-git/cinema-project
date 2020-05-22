@@ -17,19 +17,24 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
 
     @Override
     public CinemaHall add(CinemaHall cinemaHall) {
+        Session session = null;
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            Long hallId = (Long) session.save(cinemaHall);
+            session.save(cinemaHall);
             transaction.commit();
-            cinemaHall.setId(hallId);
-            LOGGER.info("Cinema hall with id " + hallId + " was added to DB");
+            LOGGER.info("Cinema hall with id " + cinemaHall.getId() + " was added to DB");
             return cinemaHall;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
             throw new DataProcessingException("Can't insert CinemaHall entity", e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 

@@ -1,9 +1,12 @@
 package com.dev.cinema;
 
+import com.dev.cinema.exception.AuthenticationException;
 import com.dev.cinema.lib.Injector;
 import com.dev.cinema.model.CinemaHall;
 import com.dev.cinema.model.Movie;
 import com.dev.cinema.model.MovieSession;
+import com.dev.cinema.model.User;
+import com.dev.cinema.security.AuthenticationService;
 import com.dev.cinema.service.CinemaHallService;
 import com.dev.cinema.service.MovieService;
 import com.dev.cinema.service.MovieSessionService;
@@ -11,9 +14,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 public class Main {
     private static final Injector INJECTOR = Injector.getInstance("com.dev.cinema");
+    private static final Logger LOGGER = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
         Movie movie = new Movie();
@@ -54,5 +59,15 @@ public class Main {
         List<MovieSession> sessions = movieSessionService.findAvailableSessions(secondMovie.getId(),
                 LocalDate.of(2020, 5, 20));
         sessions.forEach(System.out::println);
+
+        AuthenticationService authenticationService =
+                (AuthenticationService) INJECTOR.getInstance(AuthenticationService.class);
+        User user = authenticationService.register("email", "password");
+        try {
+            authenticationService.login("email", "password");
+            LOGGER.info("Authentication of user with id " + user.getId() + " was succeed");
+        } catch (AuthenticationException e) {
+            LOGGER.error(e);
+        }
     }
 }
