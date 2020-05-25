@@ -51,7 +51,7 @@ public class UserDaoImpl implements UserDao {
             Predicate predicateEmail = criteriaBuilder.equal(root.get("email"), email);
             criteriaQuery.where(predicateEmail);
             User user = session.createQuery(criteriaQuery).uniqueResult();
-            return user != null ? Optional.of(user) : Optional.empty();
+            return Optional.ofNullable(user);
         } catch (Exception e) {
             throw new DataProcessingException("Can't find user with email "
                     + email, e);
