@@ -64,7 +64,7 @@ public class Main {
                 (AuthenticationService) INJECTOR.getInstance(AuthenticationService.class);
         User user = authenticationService.register("email", "password");
         try {
-            authenticationService.login("email", "password");
+            authenticationService.login("email1", "password");
             LOGGER.info("Authentication of user with id " + user.getId() + " was succeed");
         } catch (AuthenticationException e) {
             LOGGER.error(e);
