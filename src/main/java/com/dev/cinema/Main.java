@@ -5,11 +5,13 @@ import com.dev.cinema.lib.Injector;
 import com.dev.cinema.model.CinemaHall;
 import com.dev.cinema.model.Movie;
 import com.dev.cinema.model.MovieSession;
+import com.dev.cinema.model.ShoppingCart;
 import com.dev.cinema.model.User;
 import com.dev.cinema.security.AuthenticationService;
 import com.dev.cinema.service.CinemaHallService;
 import com.dev.cinema.service.MovieService;
 import com.dev.cinema.service.MovieSessionService;
+import com.dev.cinema.service.ShoppingCartService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -63,11 +65,22 @@ public class Main {
         AuthenticationService authenticationService =
                 (AuthenticationService) INJECTOR.getInstance(AuthenticationService.class);
         User user = authenticationService.register("email", "password");
+        User user2 = authenticationService.register("email2", "password2");
         try {
-            authenticationService.login("email1", "password");
+            authenticationService.login("email", "password");
+            authenticationService.login("email2", "password2");
             LOGGER.info("Authentication of user with id " + user.getId() + " was succeed");
         } catch (AuthenticationException e) {
             LOGGER.error(e);
         }
+
+        ShoppingCartService cartService =
+                (ShoppingCartService) INJECTOR.getInstance(ShoppingCartService.class);
+        ShoppingCart cart = cartService.getByUser(user);
+        System.out.println("CartID: " + cart.getId());
+        cartService.addSession(sessionOne, user2);
+        cartService.addSession(sessionTwo, user);
+        ShoppingCart byUser = cartService.getByUser(user);
+        System.out.println(byUser.toString());
     }
 }
