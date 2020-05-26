@@ -9,7 +9,6 @@ import com.dev.cinema.model.ShoppingCart;
 import com.dev.cinema.model.Ticket;
 import com.dev.cinema.model.User;
 import com.dev.cinema.service.ShoppingCartService;
-import java.time.LocalDateTime;
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
@@ -22,7 +21,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public void addSession(MovieSession movieSession, User user) {
         Ticket ticket = new Ticket(movieSession, user);
         ShoppingCart shoppingCart = getByUser(user);
-        shoppingCart.setOrderDate(LocalDateTime.now());
         shoppingCart.getTickets().add(ticket);
         ticketDao.add(ticket);
         shoppingCartDao.update(shoppingCart);
