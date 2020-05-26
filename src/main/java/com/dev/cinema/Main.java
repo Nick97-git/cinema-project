@@ -76,8 +76,6 @@ public class Main {
 
         ShoppingCartService cartService =
                 (ShoppingCartService) INJECTOR.getInstance(ShoppingCartService.class);
-        cartService.registerNewShoppingCart(user);
-        cartService.registerNewShoppingCart(user2);
         ShoppingCart cart = cartService.getByUser(user);
         System.out.println("CartID: " + cart.getId());
         cartService.addSession(sessionOne, user2);
