@@ -11,6 +11,7 @@ import com.dev.cinema.security.AuthenticationService;
 import com.dev.cinema.service.CinemaHallService;
 import com.dev.cinema.service.MovieService;
 import com.dev.cinema.service.MovieSessionService;
+import com.dev.cinema.service.OrderService;
 import com.dev.cinema.service.ShoppingCartService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -76,11 +77,22 @@ public class Main {
 
         ShoppingCartService cartService =
                 (ShoppingCartService) INJECTOR.getInstance(ShoppingCartService.class);
-        ShoppingCart cart = cartService.getByUser(user);
-        System.out.println("CartID: " + cart.getId());
         cartService.addSession(sessionOne, user2);
         cartService.addSession(sessionTwo, user);
-        ShoppingCart byUser = cartService.getByUser(user);
-        System.out.println(byUser.toString());
+        cartService.addSession(sessionOne, user);
+        ShoppingCart cart = cartService.getByUser(user);
+        System.out.println("----------------------Cart----------------");
+        System.out.println(cart.toString());
+        OrderService orderService =
+                (OrderService) INJECTOR.getInstance(OrderService.class);
+        orderService.completeOrder(cart.getTickets(), user);
+        cartService.clear(cart);
+        cartService.addSession(sessionTwo, user);
+        cart = cartService.getByUser(user2);
+        orderService.completeOrder(cart.getTickets(), user2);
+        cartService.clear(cart);
+        System.out.println("-------------------Order History------------------------------");
+        orderService.getOrderHistory(user)
+                .forEach(order -> System.out.println(order.toString()));
     }
 }
