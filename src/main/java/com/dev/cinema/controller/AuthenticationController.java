@@ -1,6 +1,6 @@
 package com.dev.cinema.controller;
 
-import com.dev.cinema.dto.UserRegistrationDto;
+import com.dev.cinema.model.dto.UserRegistrationDto;
 import com.dev.cinema.security.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,9 +17,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody UserRegistrationDto userRegistrationDto) {
+    public void register(@RequestBody UserRegistrationDto userRegistrationDto) {
         authenticationService.register(userRegistrationDto.getEmail(),
                 userRegistrationDto.getPassword());
-        return "Registration was successful!";
     }
 }

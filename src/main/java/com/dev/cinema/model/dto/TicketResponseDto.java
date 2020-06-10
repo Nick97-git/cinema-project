@@ -1,8 +1,8 @@
-package com.dev.cinema.dto;
+package com.dev.cinema.model.dto;
 
-public class TicketDto {
+public class TicketResponseDto {
     private String movieTitle;
-    private Long hallId;
+    private String hallDescription;
     private String showTime;
 
     public String getMovieTitle() {
@@ -21,11 +21,11 @@ public class TicketDto {
         this.showTime = showTime;
     }
 
-    public Long getHallId() {
-        return hallId;
+    public String getHallDescription() {
+        return hallDescription;
     }
 
-    public void setHallId(Long hallId) {
-        this.hallId = hallId;
+    public void setHallDescription(String hallDescription) {
+        this.hallDescription = hallDescription;
     }
 }

@@ -1,9 +1,27 @@
-package com.dev.cinema.dto;
+package com.dev.cinema.model.dto;
 
 public class MovieSessionResponseDto {
+    private Long movieSessionId;
+    private Long movieId;
     private String movieTitle;
     private String hallDescription;
     private String showTime;
+
+    public Long getMovieSessionId() {
+        return movieSessionId;
+    }
+
+    public void setMovieSessionId(Long movieSessionId) {
+        this.movieSessionId = movieSessionId;
+    }
+
+    public Long getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(Long movieId) {
+        this.movieId = movieId;
+    }
 
     public String getMovieTitle() {
         return movieTitle;

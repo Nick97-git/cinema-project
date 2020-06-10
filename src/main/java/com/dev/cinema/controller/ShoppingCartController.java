@@ -1,11 +1,11 @@
 package com.dev.cinema.controller;
 
-import com.dev.cinema.dto.ShoppingCartResponseDto;
-import com.dev.cinema.dto.TicketDto;
 import com.dev.cinema.model.MovieSession;
 import com.dev.cinema.model.ShoppingCart;
 import com.dev.cinema.model.Ticket;
 import com.dev.cinema.model.User;
+import com.dev.cinema.model.dto.ShoppingCartResponseDto;
+import com.dev.cinema.model.dto.TicketResponseDto;
 import com.dev.cinema.service.MovieSessionService;
 import com.dev.cinema.service.ShoppingCartService;
 import com.dev.cinema.service.UserService;
@@ -40,29 +40,28 @@ public class ShoppingCartController {
     }
 
     @PostMapping("/addmoviesession")
-    public String add(@RequestParam Long movieSessionId,
+    public void add(@RequestParam Long movieSessionId,
                       @RequestParam Long userId) {
         User user = userService.findById(userId);
         MovieSession movieSession = movieSessionService.findById(movieSessionId);
         shoppingCartService.addSession(movieSession, user);
-        return "Movie session was successfully added to shopping cart";
     }
 
     private ShoppingCartResponseDto convertToShoppingCartDto(ShoppingCart shoppingCart) {
         ShoppingCartResponseDto shoppingCartResponseDto = new ShoppingCartResponseDto();
-        shoppingCartResponseDto.setUserId(shoppingCart.getUser().getId());
-        List<TicketDto> tickets = shoppingCart.getTickets().stream()
+        List<TicketResponseDto> tickets = shoppingCart.getTickets().stream()
                 .map(this::convertToTicketDto)
                 .collect(Collectors.toList());
         shoppingCartResponseDto.setTickets(tickets);
         return shoppingCartResponseDto;
     }
 
-    private TicketDto convertToTicketDto(Ticket ticket) {
-        TicketDto ticketDto = new TicketDto();
-        ticketDto.setMovieTitle(ticket.getMovieSession().getMovie().getTitle());
-        ticketDto.setHallId(ticket.getMovieSession().getCinemaHall().getId());
-        ticketDto.setShowTime(ticket.getMovieSession().getShowTime().toString());
-        return ticketDto;
+    private TicketResponseDto convertToTicketDto(Ticket ticket) {
+        TicketResponseDto ticketResponseDto = new TicketResponseDto();
+        ticketResponseDto.setMovieTitle(ticket.getMovieSession().getMovie().getTitle());
+        ticketResponseDto.setHallDescription(ticket.getMovieSession()
+                .getCinemaHall().getDescription());
+        ticketResponseDto.setShowTime(ticket.getMovieSession().getShowTime().toString());
+        return ticketResponseDto;
     }
 }

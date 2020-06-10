@@ -1,7 +1,7 @@
 package com.dev.cinema.controller;
 
-import com.dev.cinema.dto.CinemaHallDto;
 import com.dev.cinema.model.CinemaHall;
+import com.dev.cinema.model.dto.CinemaHallDto;
 import com.dev.cinema.service.CinemaHallService;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,9 +31,8 @@ public class CinemaHallController {
     }
 
     @PostMapping
-    public String addMovie(@RequestBody CinemaHallDto cinemaHallDto) {
+    public void addMovie(@RequestBody CinemaHallDto cinemaHallDto) {
         cinemaHallService.add(convertToCinemaHall(cinemaHallDto));
-        return "CinemaHall was successful added";
     }
 
     private CinemaHallDto convertToCinemaHallDto(CinemaHall cinemaHall) {

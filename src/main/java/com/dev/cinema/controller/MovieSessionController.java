@@ -1,10 +1,10 @@
 package com.dev.cinema.controller;
 
-import com.dev.cinema.dto.MovieSessionRequestDto;
-import com.dev.cinema.dto.MovieSessionResponseDto;
 import com.dev.cinema.model.CinemaHall;
 import com.dev.cinema.model.Movie;
 import com.dev.cinema.model.MovieSession;
+import com.dev.cinema.model.dto.MovieSessionRequestDto;
+import com.dev.cinema.model.dto.MovieSessionResponseDto;
 import com.dev.cinema.service.CinemaHallService;
 import com.dev.cinema.service.MovieService;
 import com.dev.cinema.service.MovieSessionService;
@@ -47,9 +47,8 @@ public class MovieSessionController {
     }
 
     @PostMapping
-    public String addMovieSession(@RequestBody MovieSessionRequestDto movieSessionRequestDto) {
+    public void addMovieSession(@RequestBody MovieSessionRequestDto movieSessionRequestDto) {
         movieSessionService.add(convertToMovieSession(movieSessionRequestDto));
-        return "MovieSession was successful added";
     }
 
     private MovieSession convertToMovieSession(MovieSessionRequestDto movieSessionRequestDto) {
@@ -64,6 +63,8 @@ public class MovieSessionController {
 
     private MovieSessionResponseDto convertToMovieSessionDto(MovieSession movieSession) {
         MovieSessionResponseDto movieSessionResponseDto = new MovieSessionResponseDto();
+        movieSessionResponseDto.setMovieSessionId(movieSession.getId());
+        movieSessionResponseDto.setMovieId(movieSession.getMovie().getId());
         movieSessionResponseDto.setMovieTitle(movieSession.getMovie().getTitle());
         movieSessionResponseDto.setHallDescription(movieSession.getCinemaHall().getDescription());
         movieSessionResponseDto.setShowTime(movieSession.getShowTime().toString());
