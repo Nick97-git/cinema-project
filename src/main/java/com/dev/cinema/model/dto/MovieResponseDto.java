@@ -1,15 +1,15 @@
 package com.dev.cinema.model.dto;
 
-public class CinemaHallDto {
-    private Integer capacity;
+public class MovieResponseDto {
+    private String title;
     private String description;
 
-    public Integer getCapacity() {
-        return capacity;
+    public String getTitle() {
+        return title;
     }
 
-    public void setCapacity(Integer capacity) {
-        this.capacity = capacity;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {

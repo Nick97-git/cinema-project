@@ -1,7 +1,8 @@
 package com.dev.cinema.controller;
 
 import com.dev.cinema.model.CinemaHall;
-import com.dev.cinema.model.dto.CinemaHallDto;
+import com.dev.cinema.model.dto.CinemaHallRequestDto;
+import com.dev.cinema.model.dto.CinemaHallResponseDto;
 import com.dev.cinema.service.CinemaHallService;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/cinemahalls")
+@RequestMapping("/cinema-halls")
 public class CinemaHallController {
     private final CinemaHallService cinemaHallService;
 
@@ -23,7 +24,7 @@ public class CinemaHallController {
     }
 
     @GetMapping
-    public List<CinemaHallDto> getCinemaHalls() {
+    public List<CinemaHallResponseDto> getCinemaHalls() {
         List<CinemaHall> cinemaHalls = cinemaHallService.getAll();
         return cinemaHalls.stream()
                 .map(this::convertToCinemaHallDto)
@@ -31,21 +32,21 @@ public class CinemaHallController {
     }
 
     @PostMapping
-    public void addMovie(@RequestBody CinemaHallDto cinemaHallDto) {
-        cinemaHallService.add(convertToCinemaHall(cinemaHallDto));
+    public void addMovie(@RequestBody CinemaHallRequestDto cinemaHallRequestDto) {
+        cinemaHallService.add(convertToCinemaHall(cinemaHallRequestDto));
     }
 
-    private CinemaHallDto convertToCinemaHallDto(CinemaHall cinemaHall) {
-        CinemaHallDto cinemaHallDto = new CinemaHallDto();
-        cinemaHallDto.setCapacity(cinemaHall.getCapacity());
-        cinemaHallDto.setDescription(cinemaHall.getDescription());
-        return cinemaHallDto;
+    private CinemaHallResponseDto convertToCinemaHallDto(CinemaHall cinemaHall) {
+        CinemaHallResponseDto cinemaHallResponseDto = new CinemaHallResponseDto();
+        cinemaHallResponseDto.setCapacity(cinemaHall.getCapacity());
+        cinemaHallResponseDto.setDescription(cinemaHall.getDescription());
+        return cinemaHallResponseDto;
     }
 
-    private CinemaHall convertToCinemaHall(CinemaHallDto cinemaHallDto) {
+    private CinemaHall convertToCinemaHall(CinemaHallRequestDto cinemaHallRequestDto) {
         CinemaHall cinemaHall = new CinemaHall();
-        cinemaHall.setCapacity(cinemaHallDto.getCapacity());
-        cinemaHall.setDescription(cinemaHallDto.getDescription());
+        cinemaHall.setCapacity(cinemaHallRequestDto.getCapacity());
+        cinemaHall.setDescription(cinemaHallRequestDto.getDescription());
         return cinemaHall;
     }
 }

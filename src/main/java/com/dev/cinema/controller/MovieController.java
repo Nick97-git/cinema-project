@@ -1,7 +1,8 @@
 package com.dev.cinema.controller;
 
 import com.dev.cinema.model.Movie;
-import com.dev.cinema.model.dto.MovieDto;
+import com.dev.cinema.model.dto.MovieRequestDto;
+import com.dev.cinema.model.dto.MovieResponseDto;
 import com.dev.cinema.service.MovieService;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +24,7 @@ public class MovieController {
     }
 
     @GetMapping
-    public List<MovieDto> getMovies() {
+    public List<MovieResponseDto> getMovies() {
         List<Movie> movies = movieService.getAll();
         return movies.stream()
                 .map(this::convertToMovieDto)
@@ -31,22 +32,21 @@ public class MovieController {
     }
 
     @PostMapping
-    public void addMovie(@RequestBody MovieDto movieDto) {
-        movieService.add(convertToMovie(movieDto));
+    public void addMovie(@RequestBody MovieRequestDto movieRequestDto) {
+        movieService.add(convertToMovie(movieRequestDto));
     }
 
-    private Movie convertToMovie(MovieDto movieDto) {
+    private Movie convertToMovie(MovieRequestDto movieRequestDto) {
         Movie movie = new Movie();
-        movie.setTitle(movieDto.getTitle());
-        movie.setDescription(movieDto.getDescription());
+        movie.setTitle(movieRequestDto.getTitle());
+        movie.setDescription(movieRequestDto.getDescription());
         return movie;
     }
 
-    private MovieDto convertToMovieDto(Movie movie) {
-        MovieDto movieDto = new MovieDto();
-        movieDto.setId(movie.getId());
-        movieDto.setTitle(movie.getTitle());
-        movieDto.setDescription(movie.getDescription());
-        return movieDto;
+    private MovieResponseDto convertToMovieDto(Movie movie) {
+        MovieResponseDto movieResponseDto = new MovieResponseDto();
+        movieResponseDto.setTitle(movie.getTitle());
+        movieResponseDto.setDescription(movie.getDescription());
+        return movieResponseDto;
     }
 }
