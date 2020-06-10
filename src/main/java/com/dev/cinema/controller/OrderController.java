@@ -37,7 +37,7 @@ public class OrderController {
 
     @GetMapping
     public List<OrderResponseDto> getOrdersByUser(@RequestParam Long userId) {
-        User user = userService.getById(userId);
+        User user = userService.findById(userId);
         List<Order> orders = orderService.getOrderHistory(user);
         return orders.stream()
                 .map(this::convertToOrderDto)
@@ -46,7 +46,7 @@ public class OrderController {
 
     @PostMapping("/complete")
     public String completeOrder(@RequestBody OrderRequestDto orderRequestDto) {
-        User user = userService.getById(orderRequestDto.getUserId());
+        User user = userService.findById(orderRequestDto.getUserId());
         ShoppingCart shoppingCart = shoppingCartService.getByUser(user);
         orderService.completeOrder(shoppingCart.getTickets(), user);
         return "Order was successfully completed";

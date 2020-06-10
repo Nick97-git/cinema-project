@@ -54,9 +54,9 @@ public class MovieSessionController {
 
     private MovieSession convertToMovieSession(MovieSessionRequestDto movieSessionRequestDto) {
         MovieSession movieSession = new MovieSession();
-        Movie movie = movieService.getById(movieSessionRequestDto.getMovieId());
+        Movie movie = movieService.findById(movieSessionRequestDto.getMovieId());
         movieSession.setMovie(movie);
-        CinemaHall cinemaHall = cinemaHallService.getById(movieSessionRequestDto.getHallId());
+        CinemaHall cinemaHall = cinemaHallService.findById(movieSessionRequestDto.getHallId());
         movieSession.setCinemaHall(cinemaHall);
         movieSession.setShowTime(LocalDateTime.parse(movieSessionRequestDto.getShowTime()));
         return movieSession;

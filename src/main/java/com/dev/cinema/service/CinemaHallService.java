@@ -9,5 +9,5 @@ public interface CinemaHallService {
 
     List<CinemaHall> getAll();
 
-    CinemaHall getById(Long hallId);
+    CinemaHall findById(Long hallId);
 }
