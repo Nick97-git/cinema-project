@@ -64,6 +64,7 @@ public class OrderController {
 
     private TicketResponseDto convertToTicketDto(Ticket ticket) {
         TicketResponseDto ticketResponseDto = new TicketResponseDto();
+        ticketResponseDto.setTicketId(ticket.getId());
         ticketResponseDto.setMovieTitle(ticket.getMovieSession().getMovie().getTitle());
         ticketResponseDto.setHallDescription(ticket.getMovieSession()
                 .getCinemaHall().getDescription());
