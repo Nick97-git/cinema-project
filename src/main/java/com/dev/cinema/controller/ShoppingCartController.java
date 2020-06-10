@@ -12,7 +12,6 @@ import com.dev.cinema.service.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,8 +39,8 @@ public class ShoppingCartController {
         return convertToShoppingCartDto(shoppingCart);
     }
 
-    @PostMapping("/addmoviesession/{movieSessionId}")
-    public String add(@PathVariable Long movieSessionId,
+    @PostMapping("/addmoviesession")
+    public String add(@RequestParam Long movieSessionId,
                       @RequestParam Long userId) {
         User user = userService.getById(userId);
         MovieSession movieSession = movieSessionService.getById(movieSessionId);
