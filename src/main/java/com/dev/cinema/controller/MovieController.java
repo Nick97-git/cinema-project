@@ -30,7 +30,7 @@ public class MovieController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public String addMovie(@RequestBody MovieDto movieDto) {
         movieService.add(convertToMovie(movieDto));
         return "Movies was successful added";

@@ -1,6 +1,6 @@
 package com.dev.cinema.dto;
 
-public class UserRequestDto {
+public class UserRegistrationDto {
     private String email;
     private String password;
 

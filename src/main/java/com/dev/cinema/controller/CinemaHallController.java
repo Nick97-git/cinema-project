@@ -26,24 +26,24 @@ public class CinemaHallController {
     public List<CinemaHallDto> getCinemaHalls() {
         List<CinemaHall> cinemaHalls = cinemaHallService.getAll();
         return cinemaHalls.stream()
-                .map(this::convertToHallDto)
+                .map(this::convertToCinemaHallDto)
                 .collect(Collectors.toList());
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public String addMovie(@RequestBody CinemaHallDto cinemaHallDto) {
-        cinemaHallService.add(convertToHall(cinemaHallDto));
+        cinemaHallService.add(convertToCinemaHall(cinemaHallDto));
         return "CinemaHall was successful added";
     }
 
-    private CinemaHallDto convertToHallDto(CinemaHall cinemaHall) {
+    private CinemaHallDto convertToCinemaHallDto(CinemaHall cinemaHall) {
         CinemaHallDto cinemaHallDto = new CinemaHallDto();
         cinemaHallDto.setCapacity(cinemaHall.getCapacity());
         cinemaHallDto.setDescription(cinemaHall.getDescription());
         return cinemaHallDto;
     }
 
-    private CinemaHall convertToHall(CinemaHallDto cinemaHallDto) {
+    private CinemaHall convertToCinemaHall(CinemaHallDto cinemaHallDto) {
         CinemaHall cinemaHall = new CinemaHall();
         cinemaHall.setCapacity(cinemaHallDto.getCapacity());
         cinemaHall.setDescription(cinemaHallDto.getDescription());
