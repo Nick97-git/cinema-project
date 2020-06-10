@@ -32,7 +32,7 @@ public class ShoppingCartController {
         this.userService = userService;
     }
 
-    @GetMapping("/byuser")
+    @GetMapping("/by-user")
     public ShoppingCartResponseDto getCartByUser(@RequestParam Long userId) {
         User user = userService.findById(userId);
         ShoppingCart shoppingCart = shoppingCartService.getByUser(user);

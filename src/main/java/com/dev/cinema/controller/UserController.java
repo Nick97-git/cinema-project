@@ -19,7 +19,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/byemail")
+    @GetMapping("/by-email")
     public UserResponseDto findUserByEmail(@RequestParam String email) {
         User user = userService.findByEmail(email);
         return new UserResponseDto(user.getEmail());
