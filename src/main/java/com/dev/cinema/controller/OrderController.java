@@ -1,12 +1,11 @@
 package com.dev.cinema.controller;
 
+import com.dev.cinema.mapper.OrderMapper;
 import com.dev.cinema.model.Order;
 import com.dev.cinema.model.ShoppingCart;
-import com.dev.cinema.model.Ticket;
 import com.dev.cinema.model.User;
 import com.dev.cinema.model.dto.OrderRequestDto;
 import com.dev.cinema.model.dto.OrderResponseDto;
-import com.dev.cinema.model.dto.TicketResponseDto;
 import com.dev.cinema.service.OrderService;
 import com.dev.cinema.service.ShoppingCartService;
 import com.dev.cinema.service.UserService;
@@ -26,13 +25,16 @@ public class OrderController {
     private final OrderService orderService;
     private final ShoppingCartService shoppingCartService;
     private final UserService userService;
+    private final OrderMapper orderMapper;
 
     @Autowired
     public OrderController(OrderService orderService,
-                           ShoppingCartService shoppingCartService, UserService userService) {
+                           ShoppingCartService shoppingCartService,
+                           UserService userService, OrderMapper orderMapper) {
         this.orderService = orderService;
         this.shoppingCartService = shoppingCartService;
         this.userService = userService;
+        this.orderMapper = orderMapper;
     }
 
     @GetMapping
@@ -40,7 +42,7 @@ public class OrderController {
         User user = userService.findById(userId);
         List<Order> orders = orderService.getOrderHistory(user);
         return orders.stream()
-                .map(this::convertToOrderDto)
+                .map(orderMapper::convertToResponseDto)
                 .collect(Collectors.toList());
     }
 
@@ -49,26 +51,5 @@ public class OrderController {
         User user = userService.findById(orderRequestDto.getUserId());
         ShoppingCart shoppingCart = shoppingCartService.getByUser(user);
         orderService.completeOrder(shoppingCart.getTickets(), user);
-    }
-
-    private OrderResponseDto convertToOrderDto(Order order) {
-        OrderResponseDto orderResponseDto = new OrderResponseDto();
-        orderResponseDto.setOrderId(order.getId());
-        orderResponseDto.setOrderDate(order.getOrderDate().toString());
-        List<TicketResponseDto> tickets = order.getTickets().stream()
-                .map(this::convertToTicketDto)
-                .collect(Collectors.toList());
-        orderResponseDto.setTickets(tickets);
-        return orderResponseDto;
-    }
-
-    private TicketResponseDto convertToTicketDto(Ticket ticket) {
-        TicketResponseDto ticketResponseDto = new TicketResponseDto();
-        ticketResponseDto.setTicketId(ticket.getId());
-        ticketResponseDto.setMovieTitle(ticket.getMovieSession().getMovie().getTitle());
-        ticketResponseDto.setHallDescription(ticket.getMovieSession()
-                .getCinemaHall().getDescription());
-        ticketResponseDto.setShowTime(ticket.getMovieSession().getShowTime().toString());
-        return ticketResponseDto;
     }
 }

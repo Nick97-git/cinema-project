@@ -1,5 +1,6 @@
 package com.dev.cinema.controller;
 
+import com.dev.cinema.mapper.CinemaHallMapper;
 import com.dev.cinema.model.CinemaHall;
 import com.dev.cinema.model.dto.CinemaHallRequestDto;
 import com.dev.cinema.model.dto.CinemaHallResponseDto;
@@ -17,36 +18,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/cinema-halls")
 public class CinemaHallController {
     private final CinemaHallService cinemaHallService;
+    private final CinemaHallMapper cinemaHallMapper;
 
     @Autowired
-    public CinemaHallController(CinemaHallService cinemaHallService) {
+    public CinemaHallController(CinemaHallService cinemaHallService,
+                                CinemaHallMapper cinemaHallMapper) {
         this.cinemaHallService = cinemaHallService;
+        this.cinemaHallMapper = cinemaHallMapper;
     }
 
     @GetMapping
     public List<CinemaHallResponseDto> getCinemaHalls() {
         List<CinemaHall> cinemaHalls = cinemaHallService.getAll();
         return cinemaHalls.stream()
-                .map(this::convertToCinemaHallDto)
+                .map(cinemaHallMapper::convertToResponseDto)
                 .collect(Collectors.toList());
     }
 
     @PostMapping
     public void addMovie(@RequestBody CinemaHallRequestDto cinemaHallRequestDto) {
-        cinemaHallService.add(convertToCinemaHall(cinemaHallRequestDto));
-    }
-
-    private CinemaHallResponseDto convertToCinemaHallDto(CinemaHall cinemaHall) {
-        CinemaHallResponseDto cinemaHallResponseDto = new CinemaHallResponseDto();
-        cinemaHallResponseDto.setCapacity(cinemaHall.getCapacity());
-        cinemaHallResponseDto.setDescription(cinemaHall.getDescription());
-        return cinemaHallResponseDto;
-    }
-
-    private CinemaHall convertToCinemaHall(CinemaHallRequestDto cinemaHallRequestDto) {
-        CinemaHall cinemaHall = new CinemaHall();
-        cinemaHall.setCapacity(cinemaHallRequestDto.getCapacity());
-        cinemaHall.setDescription(cinemaHallRequestDto.getDescription());
-        return cinemaHall;
+        cinemaHallService.add(cinemaHallMapper.convertToCinemaHall(cinemaHallRequestDto));
     }
 }

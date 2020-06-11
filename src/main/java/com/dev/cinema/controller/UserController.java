@@ -1,5 +1,6 @@
 package com.dev.cinema.controller;
 
+import com.dev.cinema.mapper.UserMapper;
 import com.dev.cinema.model.User;
 import com.dev.cinema.model.dto.UserResponseDto;
 import com.dev.cinema.service.UserService;
@@ -12,16 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+    private final UserMapper userMapper;
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserMapper userMapper, UserService userService) {
+        this.userMapper = userMapper;
         this.userService = userService;
     }
 
     @GetMapping("/by-email")
     public UserResponseDto findUserByEmail(@RequestParam String email) {
         User user = userService.findByEmail(email);
-        return new UserResponseDto(user.getEmail());
+        return userMapper.convertToResponseDto(user);
     }
 }

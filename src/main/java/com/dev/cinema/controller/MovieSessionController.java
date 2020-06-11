@@ -1,15 +1,11 @@
 package com.dev.cinema.controller;
 
-import com.dev.cinema.model.CinemaHall;
-import com.dev.cinema.model.Movie;
+import com.dev.cinema.mapper.MovieSessionMapper;
 import com.dev.cinema.model.MovieSession;
 import com.dev.cinema.model.dto.MovieSessionRequestDto;
 import com.dev.cinema.model.dto.MovieSessionResponseDto;
-import com.dev.cinema.service.CinemaHallService;
-import com.dev.cinema.service.MovieService;
 import com.dev.cinema.service.MovieSessionService;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +17,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/moviesessions")
+@RequestMapping("/movie-sessions")
 public class MovieSessionController {
-    private final CinemaHallService cinemaHallService;
     private final MovieSessionService movieSessionService;
-    private final MovieService movieService;
+    private final MovieSessionMapper movieSessionMapper;
 
     @Autowired
-    public MovieSessionController(CinemaHallService cinemaHallService,
-                                  MovieSessionService movieSessionService,
-                                  MovieService movieService) {
-        this.cinemaHallService = cinemaHallService;
+    public MovieSessionController(MovieSessionService movieSessionService,
+                                  MovieSessionMapper movieSessionMapper) {
         this.movieSessionService = movieSessionService;
-        this.movieService = movieService;
+        this.movieSessionMapper = movieSessionMapper;
     }
 
     @GetMapping("/available")
@@ -42,32 +35,12 @@ public class MovieSessionController {
         List<MovieSession> availableSessions = movieSessionService
                 .findAvailableSessions(movieId, date);
         return availableSessions.stream()
-                .map(this::convertToMovieSessionDto)
+                .map(movieSessionMapper::convertToResponseDto)
                 .collect(Collectors.toList());
     }
 
     @PostMapping
     public void addMovieSession(@RequestBody MovieSessionRequestDto movieSessionRequestDto) {
-        movieSessionService.add(convertToMovieSession(movieSessionRequestDto));
-    }
-
-    private MovieSession convertToMovieSession(MovieSessionRequestDto movieSessionRequestDto) {
-        MovieSession movieSession = new MovieSession();
-        Movie movie = movieService.findById(movieSessionRequestDto.getMovieId());
-        movieSession.setMovie(movie);
-        CinemaHall cinemaHall = cinemaHallService.findById(movieSessionRequestDto.getHallId());
-        movieSession.setCinemaHall(cinemaHall);
-        movieSession.setShowTime(LocalDateTime.parse(movieSessionRequestDto.getShowTime()));
-        return movieSession;
-    }
-
-    private MovieSessionResponseDto convertToMovieSessionDto(MovieSession movieSession) {
-        MovieSessionResponseDto movieSessionResponseDto = new MovieSessionResponseDto();
-        movieSessionResponseDto.setMovieSessionId(movieSession.getId());
-        movieSessionResponseDto.setMovieId(movieSession.getMovie().getId());
-        movieSessionResponseDto.setMovieTitle(movieSession.getMovie().getTitle());
-        movieSessionResponseDto.setHallDescription(movieSession.getCinemaHall().getDescription());
-        movieSessionResponseDto.setShowTime(movieSession.getShowTime().toString());
-        return movieSessionResponseDto;
+        movieSessionService.add(movieSessionMapper.convertToMovieSession(movieSessionRequestDto));
     }
 }
