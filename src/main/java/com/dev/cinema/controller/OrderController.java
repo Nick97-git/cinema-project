@@ -11,12 +11,13 @@ import com.dev.cinema.service.ShoppingCartService;
 import com.dev.cinema.service.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -38,8 +39,8 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<OrderResponseDto> getOrdersByUser(@RequestParam Long userId) {
-        User user = userService.findById(userId);
+    public List<OrderResponseDto> getOrdersByUser(Authentication authentication) {
+        User user = userService.findByEmail(authentication.getName());
         List<Order> orders = orderService.getOrderHistory(user);
         return orders.stream()
                 .map(orderMapper::convertToResponseDto)
@@ -47,7 +48,7 @@ public class OrderController {
     }
 
     @PostMapping("/complete")
-    public void completeOrder(@RequestBody OrderRequestDto orderRequestDto) {
+    public void completeOrder(@RequestBody @Valid OrderRequestDto orderRequestDto) {
         User user = userService.findById(orderRequestDto.getUserId());
         ShoppingCart shoppingCart = shoppingCartService.getByUser(user);
         orderService.completeOrder(shoppingCart.getTickets(), user);

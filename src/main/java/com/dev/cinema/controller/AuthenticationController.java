@@ -2,6 +2,7 @@ package com.dev.cinema.controller;
 
 import com.dev.cinema.model.dto.UserRegistrationDto;
 import com.dev.cinema.security.AuthenticationService;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody UserRegistrationDto userRegistrationDto) {
+    public void register(@RequestBody @Valid UserRegistrationDto userRegistrationDto) {
         authenticationService.register(userRegistrationDto.getEmail(),
                 userRegistrationDto.getPassword());
     }
