@@ -63,4 +63,13 @@ public class UserDaoImpl implements UserDao {
                     + email, e);
         }
     }
+
+    @Override
+    public User findById(Long userId) {
+        try (Session session = factory.openSession()) {
+            return session.get(User.class, userId);
+        } catch (Exception e) {
+            throw new DataProcessingException("Can't get user with id = " + userId, e);
+        }
+    }
 }
