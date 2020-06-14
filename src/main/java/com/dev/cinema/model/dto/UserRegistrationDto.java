@@ -1,11 +1,11 @@
 package com.dev.cinema.model.dto;
 
 import com.dev.cinema.annotation.EmailConstraint;
-import com.dev.cinema.annotation.PasswordsCheck;
+import com.dev.cinema.annotation.PasswordsValueMatch;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@PasswordsCheck
+@PasswordsValueMatch
 public class UserRegistrationDto {
     @NotNull(message = "Email can't be null!")
     @EmailConstraint

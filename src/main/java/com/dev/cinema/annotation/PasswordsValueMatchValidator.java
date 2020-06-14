@@ -4,12 +4,14 @@ import com.dev.cinema.model.dto.UserRegistrationDto;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class PasswordsCheckValidator implements
-        ConstraintValidator<PasswordsCheck, UserRegistrationDto> {
+public class PasswordsValueMatchValidator implements
+        ConstraintValidator<PasswordsValueMatch, UserRegistrationDto> {
 
     @Override
     public boolean isValid(UserRegistrationDto userRegistrationDto, ConstraintValidatorContext
             constraintValidatorContext) {
-        return userRegistrationDto.getPassword().equals(userRegistrationDto.getRepeatPassword());
+        String password = userRegistrationDto.getPassword();
+        String repeatPassword = userRegistrationDto.getRepeatPassword();
+        return password != null && password.equals(repeatPassword);
     }
 }
