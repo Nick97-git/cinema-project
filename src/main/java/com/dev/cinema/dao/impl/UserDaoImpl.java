@@ -4,14 +4,11 @@ import com.dev.cinema.dao.UserDao;
 import com.dev.cinema.exception.DataProcessingException;
 import com.dev.cinema.model.User;
 import java.util.Optional;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -51,13 +48,12 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> findByEmail(String email) {
         try (Session session = factory.openSession()) {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<User> criteriaQuery = criteriaBuilder
-                    .createQuery(User.class);
-            Root<User> root = criteriaQuery.from(User.class);
-            Predicate predicateEmail = criteriaBuilder.equal(root.get("email"), email);
-            criteriaQuery.where(predicateEmail);
-            return session.createQuery(criteriaQuery).uniqueResultOptional();
+            Query<User> query = session
+                    .createQuery("from User u "
+                            + "left join fetch u.roles Role "
+                            + " where u.email =: email", User.class);
+            query.setParameter("email", email);
+            return query.uniqueResultOptional();
         } catch (Exception e) {
             throw new DataProcessingException("Can't find user with email "
                     + email, e);
