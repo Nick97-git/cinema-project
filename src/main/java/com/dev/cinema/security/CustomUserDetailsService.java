@@ -1,6 +1,5 @@
 package com.dev.cinema.security;
 
-import com.dev.cinema.model.Role;
 import com.dev.cinema.model.User;
 import com.dev.cinema.service.UserService;
 import org.springframework.security.core.userdetails.User.UserBuilder;
@@ -28,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .User.withUsername(email);
         userBuilder.password(user.getPassword());
         String[] roles = user.getRoles().stream()
-                .map(Role::getRoleName)
+                .map(role -> role.getRoleName().name())
                 .toArray(String[]::new);
         userBuilder.roles(roles);
         return userBuilder.build();

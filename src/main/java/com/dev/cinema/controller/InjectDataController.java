@@ -30,9 +30,9 @@ public class InjectDataController {
     @GetMapping("/inject")
     public String injectData() {
         Role adminRole = new Role();
-        adminRole.setRoleName("ADMIN");
+        adminRole.setRoleName(Role.RoleName.ADMIN);
         Role userRole = new Role();
-        userRole.setRoleName("USER");
+        userRole.setRoleName(Role.RoleName.USER);
         roleService.add(adminRole);
         roleService.add(userRole);
         User admin = new User();
