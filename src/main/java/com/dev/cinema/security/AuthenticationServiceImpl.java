@@ -32,8 +32,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public User login(String email, String password) throws AuthenticationException {
         User user = userService.findByEmail(email);
-        if (user != null
-                && passwordEncoder.encode(user.getPassword()).equals(user.getPassword())) {
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             return user;
         }
         throw new AuthenticationException("Incorrect email or password!!!");
