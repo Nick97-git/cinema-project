@@ -4,10 +4,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class HelloController {
+public class MainPageController {
 
-    @GetMapping("/hello")
-    public String sayHello() {
-        return "hello";
+    @GetMapping
+    public String sayWelcome() {
+        return "Welcome to Cinema Booking System!";
     }
 }
