@@ -1,4 +1,4 @@
-# Internet-shop project
+# Cinema-project
 # Table of Contents
 * [Project purpose](#purpose)
 * [Project structure](#structure)
