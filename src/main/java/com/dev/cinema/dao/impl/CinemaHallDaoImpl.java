@@ -42,7 +42,7 @@ public class CinemaHallDaoImpl extends GenericDaoImpl<CinemaHall> implements Cin
     }
 
     @Override
-    public CinemaHall findById(Long hallId) {
-        return super.findById(hallId, CinemaHall.class);
+    public CinemaHall getById(Long hallId) {
+        return super.getById(hallId, CinemaHall.class);
     }
 }

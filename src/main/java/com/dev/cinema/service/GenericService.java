@@ -4,5 +4,5 @@ public interface GenericService<T> {
 
     T add(T element);
 
-    T findById(Long id);
+    T getById(Long id);
 }

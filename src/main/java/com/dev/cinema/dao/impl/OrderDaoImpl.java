@@ -31,8 +31,8 @@ public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     }
 
     @Override
-    public Order findById(Long id) {
-        return super.findById(id, Order.class);
+    public Order getById(Long id) {
+        return super.getById(id, Order.class);
     }
 
     @Override

@@ -4,5 +4,5 @@ import com.dev.cinema.model.User;
 
 public interface UserService extends GenericService<User> {
 
-    User findByEmail(String email);
+    User getByEmail(String email);
 }

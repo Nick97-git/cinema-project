@@ -30,7 +30,7 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<User> getByEmail(String email) {
         try (Session session = factory.openSession()) {
             Query<User> query = session
                     .createQuery("from User u "
@@ -45,7 +45,7 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao {
     }
 
     @Override
-    public User findById(Long userId) {
-        return super.findById(userId, User.class);
+    public User getById(Long userId) {
+        return super.getById(userId, User.class);
     }
 }

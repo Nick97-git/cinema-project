@@ -31,8 +31,8 @@ public class ShoppingCartDaoImpl extends GenericDaoImpl<ShoppingCart> implements
     }
 
     @Override
-    public ShoppingCart findById(Long id) {
-        return super.findById(id, ShoppingCart.class);
+    public ShoppingCart getById(Long id) {
+        return super.getById(id, ShoppingCart.class);
     }
 
     @Override

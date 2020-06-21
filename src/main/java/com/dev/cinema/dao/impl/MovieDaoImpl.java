@@ -42,7 +42,7 @@ public class MovieDaoImpl extends GenericDaoImpl<Movie> implements MovieDao {
     }
 
     @Override
-    public Movie findById(Long movieId) {
-        return super.findById(movieId, Movie.class);
+    public Movie getById(Long movieId) {
+        return super.getById(movieId, Movie.class);
     }
 }

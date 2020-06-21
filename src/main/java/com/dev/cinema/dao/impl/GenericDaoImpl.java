@@ -36,7 +36,7 @@ public abstract class GenericDaoImpl<T> implements GenericDao<T> {
         }
     }
 
-    protected T findById(Long id, Class<T> clazz) {
+    protected T getById(Long id, Class<T> clazz) {
         try (Session session = factory.openSession()) {
             return session.get(clazz, id);
         } catch (Exception e) {

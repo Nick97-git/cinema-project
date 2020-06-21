@@ -24,7 +24,7 @@ public class TicketDaoImpl extends GenericDaoImpl<Ticket> implements TicketDao {
     }
 
     @Override
-    public Ticket findById(Long id) {
-        return super.findById(id, Ticket.class);
+    public Ticket getById(Long id) {
+        return super.getById(id, Ticket.class);
     }
 }

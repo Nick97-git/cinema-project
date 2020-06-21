@@ -27,8 +27,8 @@ public class RoleDaoImpl extends GenericDaoImpl<Role> implements RoleDao {
     }
 
     @Override
-    public Role findById(Long id) {
-        return super.findById(id, Role.class);
+    public Role getById(Long id) {
+        return super.getById(id, Role.class);
     }
 
     @Override
