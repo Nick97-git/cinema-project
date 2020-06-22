@@ -13,36 +13,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ShoppingCartDaoImpl implements ShoppingCartDao {
+public class ShoppingCartDaoImpl extends GenericDaoImpl<ShoppingCart> implements ShoppingCartDao {
     private static final Logger LOGGER = Logger.getLogger(ShoppingCartDaoImpl.class);
     private final SessionFactory factory;
 
     @Autowired
     public ShoppingCartDaoImpl(SessionFactory factory) {
+        super(factory);
         this.factory = factory;
     }
 
     @Override
     public ShoppingCart add(ShoppingCart shoppingCart) {
-        Session session = null;
-        Transaction transaction = null;
-        try {
-            session = factory.openSession();
-            transaction = session.beginTransaction();
-            session.save(shoppingCart);
-            transaction.commit();
-            LOGGER.info("Shopping cart with id " + shoppingCart.getId() + " was added to DB");
-            return shoppingCart;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new DataProcessingException("Can't insert ShoppingCart entity", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
+        shoppingCart = super.add(shoppingCart);
+        LOGGER.info("Shopping cart with id " + shoppingCart.getId() + " was added to DB");
+        return shoppingCart;
+    }
+
+    @Override
+    public ShoppingCart getById(Long id) {
+        return super.getById(id, ShoppingCart.class);
     }
 
     @Override

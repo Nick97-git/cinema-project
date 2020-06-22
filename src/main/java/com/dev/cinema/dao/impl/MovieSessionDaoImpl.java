@@ -14,45 +14,29 @@ import javax.persistence.criteria.Root;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class MovieSessionDaoImpl implements MovieSessionDao {
+public class MovieSessionDaoImpl extends GenericDaoImpl<MovieSession> implements MovieSessionDao {
     private static final Logger LOGGER = Logger.getLogger(MovieSessionDaoImpl.class);
     private final SessionFactory factory;
 
     @Autowired
     public MovieSessionDaoImpl(SessionFactory factory) {
+        super(factory);
         this.factory = factory;
     }
 
     @Override
     public MovieSession add(MovieSession movieSession) {
-        Session session = null;
-        Transaction transaction = null;
-        try {
-            session = factory.openSession();
-            transaction = session.beginTransaction();
-            session.save(movieSession);
-            transaction.commit();
-            LOGGER.info("Movie session with id " + movieSession.getId() + " was added to DB");
-            return movieSession;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new DataProcessingException("Can't insert MovieSession entity", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
+        movieSession = super.add(movieSession);
+        LOGGER.info("Movie session with id " + movieSession.getId() + " was added to DB");
+        return movieSession;
     }
 
     @Override
-    public List<MovieSession> findAvailableSessions(Long movieId, LocalDate date) {
+    public List<MovieSession> getAvailableSessions(Long movieId, LocalDate date) {
         try (Session session = factory.openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<MovieSession> criteriaQuery = criteriaBuilder
@@ -70,12 +54,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
     }
 
     @Override
-    public MovieSession findById(Long movieSessionId) {
-        try (Session session = factory.openSession()) {
-            return session.get(MovieSession.class, movieSessionId);
-        } catch (Exception e) {
-            throw new DataProcessingException("Can't get movie session with id = "
-                    + movieSessionId, e);
-        }
+    public MovieSession getById(Long movieSessionId) {
+        return super.getById(movieSessionId, MovieSession.class);
     }
 }

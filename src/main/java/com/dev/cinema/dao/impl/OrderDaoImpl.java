@@ -8,42 +8,31 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class OrderDaoImpl implements OrderDao {
+public class OrderDaoImpl extends GenericDaoImpl<Order> implements OrderDao {
     private static final Logger LOGGER = Logger.getLogger(OrderDaoImpl.class);
     private final SessionFactory factory;
 
     @Autowired
     public OrderDaoImpl(SessionFactory factory) {
+        super(factory);
         this.factory = factory;
     }
 
     @Override
     public Order add(Order order) {
-        Session session = null;
-        Transaction transaction = null;
-        try {
-            session = factory.openSession();
-            transaction = session.beginTransaction();
-            session.save(order);
-            transaction.commit();
-            LOGGER.info("Order with id " + order.getId() + " was added to DB");
-            return order;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new DataProcessingException("Can't insert Order entity", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
+        order = super.add(order);
+        LOGGER.info("Order with id " + order.getId() + " was added to DB");
+        return order;
+    }
+
+    @Override
+    public Order getById(Long id) {
+        return super.getById(id, Order.class);
     }
 
     @Override

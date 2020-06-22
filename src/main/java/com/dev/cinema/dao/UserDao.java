@@ -3,11 +3,7 @@ package com.dev.cinema.dao;
 import com.dev.cinema.model.User;
 import java.util.Optional;
 
-public interface UserDao {
+public interface UserDao extends GenericDao<User> {
 
-    User add(User user);
-
-    Optional<User> findByEmail(String email);
-
-    User findById(Long userId);
+    Optional<User> getByEmail(String email);
 }

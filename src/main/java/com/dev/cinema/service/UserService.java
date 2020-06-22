@@ -2,11 +2,7 @@ package com.dev.cinema.service;
 
 import com.dev.cinema.model.User;
 
-public interface UserService {
+public interface UserService extends GenericService<User> {
 
-    User add(User user);
-
-    User findByEmail(String email);
-
-    User findById(Long userId);
+    User getByEmail(String email);
 }

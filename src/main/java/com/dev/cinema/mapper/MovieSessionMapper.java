@@ -24,9 +24,9 @@ public class MovieSessionMapper {
 
     public MovieSession convertToMovieSession(MovieSessionRequestDto movieSessionRequestDto) {
         MovieSession movieSession = new MovieSession();
-        Movie movie = movieService.findById(movieSessionRequestDto.getMovieId());
+        Movie movie = movieService.getById(movieSessionRequestDto.getMovieId());
         movieSession.setMovie(movie);
-        CinemaHall cinemaHall = cinemaHallService.findById(movieSessionRequestDto.getHallId());
+        CinemaHall cinemaHall = cinemaHallService.getById(movieSessionRequestDto.getHallId());
         movieSession.setCinemaHall(cinemaHall);
         movieSession.setShowTime(LocalDateTime.parse(movieSessionRequestDto.getShowTime()));
         return movieSession;
